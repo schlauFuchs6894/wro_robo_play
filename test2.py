@@ -15,7 +15,6 @@ pair.stop()
 #pair.stop()
 print("wait on blue")
 #c.wait_until_color("blue")
-#print("stope onblue")
 
 while(stoppen == False):
   pair.run_for_rotations(0.1, speedl=-20, speedr=20)
