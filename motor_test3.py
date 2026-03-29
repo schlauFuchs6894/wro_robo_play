@@ -2,34 +2,47 @@
 
 from buildhat import Motor
 from buildhat import MotorPair
-import RPi.GPIO as GPIO
+from gpiozero import Button
+from signal import pause
 import time
 
-BUTTON_ROT = 31 #GPIO6
-BUTTON_BLAU = 32 #GPIO12
+GPIO_BUTTON_ROT = 12 #Pin 31
+GPIO_BUTTON_BLAU = 6 #Pin 32
 
-#inti GPIO pin 12, 6 as input with pull-up resistor
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(BUTTON_ROT, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(BUTTON_BLAU, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+# Initialisiert GPIO 6 mit internem Pull-Up
+button_rot = Button(GPIO_BUTTON_ROT)
+button_blau = Button(GPIO_BUTTON_BLAU)
+
+# Motoren initialisieren
+print("int motor A")
+lift = Motor('A')
+print("int motor B")
+zange = Motor('B')
+print("int motor C")
+ml = Motor('C')
+print("int motor D")
+mr = Motor('D')
+
+
+if button_blau.is_pressed:
+    print("Schalter ist GEDRÜCKT (Pin ist LOW)")
+else:
+    print("Schalter ist OFFEN (Pin ist HIGH)")
+
+# Um den exakten Digitalwert (0 oder 1) zu sehen:
+print(f"Digitaler Wert: {button_blau.value}") 
+# Hinweis: .value ist bei Button invertiert (1 = gedrückt)
+
+
 print("Wait for button press...Blau")
-
 try:
-    while GPIO.input(BUTTON_BLAU) == GPIO.HIGH:
+    while button_blau.is_pressed:
         # In pull-up mode, the pin is 0 (LOW) when the switch is pressed
         time.sleep(0.1)
 
     #read GPIO pin 12, 6
 
-    print("int motor A")
-    lift = Motor('A')
-    print("int motor B")
-    zange = Motor('B')
-    print("int motor C")
-    ml = Motor('C')
-    print("int motor D")
-    mr = Motor('D')
-
+ 
     #fahren = MotorPair('C', 'D')
     #fahren.set_default_speed(50)
     #fahren.run_for_rotations(2)
@@ -45,4 +58,8 @@ try:
 
     print("Done!")
 except KeyboardInterrupt:
-    GPIO.cleanup() # Reset pins on exit
+    print("Interrupted by user, stopping motors...")
+    lift.stop()
+    zange.stop()
+    ml.stop()
+    mr.stop()
