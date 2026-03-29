@@ -5,8 +5,8 @@ from buildhat import MotorPair
 import RPi.GPIO as GPIO
 import time
 
-BUTTON_ROT = 6
-BUTTON_BLAU = 12
+BUTTON_ROT = 31 #GPIO6
+BUTTON_BLAU = 32 #GPIO12
 
 #inti GPIO pin 12, 6 as input with pull-up resistor
 GPIO.setmode(GPIO.BCM)
