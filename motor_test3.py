@@ -6,8 +6,8 @@ from gpiozero import Button
 from signal import pause
 import time
 
-GPIO_BUTTON_ROT = 12 #Pin 31
-GPIO_BUTTON_BLAU = 6 #Pin 32
+GPIO_BUTTON_ROT = 12 #Pin 32
+GPIO_BUTTON_BLAU = 6 #Pin 31
 
 # Initialisiert GPIO 6 mit internem Pull-Up
 button_rot = Button(GPIO_BUTTON_ROT)
