@@ -34,7 +34,7 @@ print(f"Digitaler Wert: {button_blau.value}")
 
 print("Wait for button press...Blau")
 try:
-    while button_blau.is_released:
+    while not button_blau.is_pressed:
         # In pull-up mode, the pin is 0 (LOW) when the switch is pressed
         time.sleep(0.1)
 
@@ -58,7 +58,7 @@ try:
     fahren.start(speedl=30, speedr=-30)
 
     print("Stop on Button red...")
-    while button_rot.is_released:
+    while not button_rot.is_pressed:
         # In pull-up mode, the pin is 0 (LOW) when the switch is pressed
         time.sleep(0.1)
     
