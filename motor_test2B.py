@@ -53,9 +53,9 @@ try:
     #ml.run_for_degrees(90)
     #mr.run_for_degrees(90)
     fahren.set_default_speed(20)
-    fahren.run_for_rotations(1, speedl=100, speedr=-100)
+    fahren.run_for_rotations(1, speedl=-100, speedr=100)
     fahren.run_to_position(20, 100, speed=20)
-    fahren.start(speedl=30, speedr=-30)
+    fahren.start(speedl=-30, speedr=30)
 
     print("Stop on Button red...")
     while not button_rot.is_pressed:
