@@ -18,10 +18,7 @@ print("int motor A")
 lift = Motor('A')
 print("int motor B")
 zange = Motor('B')
-print("int motor C")
-#ml = Motor('C')
-print("int motor D")
-#mr = Motor('D')
+print("int motor pair C+D")
 fahren = MotorPair('C', 'D')
 
 
@@ -37,7 +34,7 @@ print(f"Digitaler Wert: {button_blau.value}")
 
 print("Wait for button press...Blau")
 try:
-    while button_blau.is_pressed:
+    while button_blau.is_released:
         # In pull-up mode, the pin is 0 (LOW) when the switch is pressed
         time.sleep(0.1)
 
@@ -56,11 +53,18 @@ try:
     #ml.run_for_degrees(90)
     #mr.run_for_degrees(90)
     fahren.set_default_speed(20)
-    fahren.run_for_rotations(2)
-
-    fahren.run_for_rotations(1, speedl=100, speedr=20)
-
+    fahren.run_for_rotations(1, speedl=100, speedr=-100)
     fahren.run_to_position(20, 100, speed=20)
+    fahren.start(speedl=30, speedr=-30)
+
+    print("Stop on Button red...")
+    while button_rot.is_released:
+        # In pull-up mode, the pin is 0 (LOW) when the switch is pressed
+        time.sleep(0.1)
+    
+    fahren.stop()
+      
+
 
     print("Done!")
 except KeyboardInterrupt:
