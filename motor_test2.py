@@ -5,15 +5,12 @@ import time
 lift = Motor('B')
 color = ColorDistanceSensor('A')
 raeder = MotorPair('D', 'C')
+startistpassiert = False
+raeder.set_default_speed(30)
 
-while True:
-    colorfarbe = color.get_color()
-
-    if colorfarbe == 'black':
-        raeder.start()  # fährt vorwärts
-        print("Schwarz erkannt: fahre vorwärts")
-    else:
-        raeder.stop()   # stoppt
-        print("Nicht schwarz: stoppt")
-
-    time.sleep(0.1)
+while not stoppt:
+    if color.get_color() == 'blue':
+        raeder.stop()  # einmal stoppen
+        stoppt = True
+        print("Blau erkannt: stoppe")
+    time.sleep(0.1)  # kleine Pause, Sensor reagiert besser
