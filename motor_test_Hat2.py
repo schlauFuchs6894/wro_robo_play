@@ -15,7 +15,7 @@ button_blau = Button(GPIO_BUTTON_BLAU)
 
 
 def run_hat2():
-    print(f"[HAT2] process started, PID={os.getpid()}", flush=True)
+    print(f"[HAT2] start")
     try:
         Hat(
             device="/dev/ttyAMA4",
@@ -23,8 +23,7 @@ def run_hat2():
             boot0_gpio=24,
             debug=True,
         )
-        print(f"[HAT2] init SensorS and Actors")
-
+ 
     except Exception as exc:
         print(
             {
@@ -35,6 +34,7 @@ def run_hat2():
         )
         return
 
+    print(f"[HAT2] init SensorS and Actors")
     # Motoren initialisieren
     print("int motor A")
     lift = Motor('A')
