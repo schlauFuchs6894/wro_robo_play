@@ -4,7 +4,7 @@ import time
 
 lift = Motor('B')
 color = ColorDistanceSensor('A')
-raeder = MotorPair('D', 'E')
+raeder = MotorPair('D', 'C')
 
 while True:
     colorfarbe = color.get_color()
