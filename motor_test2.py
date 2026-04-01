@@ -4,16 +4,16 @@ import time
 
 lift = Motor('B')
 color = ColorDistanceSensor('A')
-räder = MotorPair('D', 'E')
+raeder = MotorPair('D', 'E')
 
 while True:
-    r, g, b, i = color.get_color_rgb()
+    colorfarbe = color.get_color()
 
-    if r < 20 and g < 20 and b < 20:
-        fahren.start()  # fährt vorwärts
+    if colorfarbe == 'black':
+        raeder.start()  # fährt vorwärts
         print("Schwarz erkannt: fahre vorwärts")
     else:
-        fahren.stop()   # stoppt
+        raeder.stop()   # stoppt
         print("Nicht schwarz: stoppt")
 
     time.sleep(0.1)
