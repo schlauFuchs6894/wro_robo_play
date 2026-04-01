@@ -24,13 +24,13 @@ try:
         # In pull-up mode, the pin is 0 (LOW) when the switch is pressed
         time.sleep(0.1)
 
-    fahren.run_for_rotations(1)
+    fahren.run_for_rotations(1) # right turn
 
     print("press blue... Run rotations 1 10,-10...") #-> fwd left, bwd right
     while not button_blau.is_pressed:
         # In pull-up mode, the pin is 0 (LOW) when the switch is pressed
         time.sleep(0.1)
-    fahren.run_for_rotations(1, speedl=10, speedr=10)
+    fahren.run_for_rotations(1, speedl=10, speedr=-10)
 
     print("Wait for button press...Blau")
     while not button_blau.is_pressed:
@@ -38,7 +38,7 @@ try:
         time.sleep(0.1)
 
     print("Run rotations 10 10,-10...") #-> fwd left, bwd right
-    fahren.run_for_rotations(10, speedl=10, speedr=10)
+    fahren.run_for_rotations(10, speedl=10, speedr=-10)
 
     print("Wait for button press...Blau")
     while not button_blau.is_pressed:
@@ -46,7 +46,7 @@ try:
         time.sleep(0.1)
 
     print("Run degrees 90 -90...") #-> fwd left, bwd right
-    fahren.run_for_degrees(90, speedl=10, speedr=10)
+    fahren.run_for_degrees(90, speedl=10, speedr=-10)
 
 
     print("Stop on Button red...")
