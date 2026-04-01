@@ -36,19 +36,7 @@ def run_hat2():
 
     print(f"[HAT2] init SensorS and Actors")
     # Motoren initialisieren
-    print("int motor A")
     lift = Motor('A')
- 
-
-    if button_blau.is_pressed:
-        print("Schalter ist GEDRÜCKT (Pin ist LOW)")
-    else:
-        print("Schalter ist OFFEN (Pin ist HIGH)")
-
-    # Um den exakten Digitalwert (0 oder 1) zu sehen:
-    print(f"Digitaler Wert: {button_blau.value}") 
-    # Hinweis: .value ist bei Button invertiert (1 = gedrückt)
-
 
     print("Wait for button press...Blau")
     try:
