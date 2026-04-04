@@ -13,4 +13,8 @@ while not stoppt:
         raeder.stop()  # einmal stoppen
         stoppt = True
         print("Blau erkannt: stoppe")
-    time.sleep(0.1)  # kleine Pause, Sensor reagiert besser
+    time.sleep(0.1) 
+
+raeder.start()
+wait(5)
+raeder.stop()
