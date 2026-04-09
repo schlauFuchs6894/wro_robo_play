@@ -23,14 +23,14 @@ def run_hat2(cmd_q: Queue, evt_q: Queue) -> None:
     except Exception as exc:
         evt_q.put(
             {
-                "hat": 2,
+                "hat_id": 2,
                 "event": "error",
                 "message": f"init failed: {type(exc).__name__}: {exc}",
             }
         )
         return
 
-    evt_q.put({"hat": 2, "event": "ready"})
+    evt_q.put({"hat_id": 2, "event": "ready"})
 
     running = True
     while running:
@@ -44,11 +44,11 @@ def run_hat2(cmd_q: Queue, evt_q: Queue) -> None:
         if action == "read_distance":
             try:
                 distance = sensor_d.get_distance()
-                evt_q.put({"hat": 2, "event": "distance", "value": distance})
+                evt_q.put({"hat_id": 2, "event": "distance", "value": distance})
             except Exception as exc:
                 evt_q.put(
                     {
-                        "hat": 2,
+                        "hat_id": 2,
                         "event": "error",
                         "message": f"distance read failed: {type(exc).__name__}: {exc}",
                     }
@@ -58,11 +58,11 @@ def run_hat2(cmd_q: Queue, evt_q: Queue) -> None:
         #     speed = int(cmd.get("speed", 30))
         #     try:
         #         motor_a.start(speed)
-        #         evt_q.put({"hat": 2, "event": "motor_started", "speed": speed})
+        #         evt_q.put({"hat_id": 2, "event": "motor_started", "speed": speed})
         #     except Exception as exc:
         #         evt_q.put(
         #             {
-        #                 "hat": 2,
+        #                 "hat_id": 2,
         #                 "event": "error",
         #                 "message": f"motor start failed: {type(exc).__name__}: {exc}",
         #             }
@@ -71,11 +71,11 @@ def run_hat2(cmd_q: Queue, evt_q: Queue) -> None:
         # elif action == "motor_stop":
         #     try:
         #         motor_a.stop()
-        #         evt_q.put({"hat": 2, "event": "motor_stopped"})
+        #         evt_q.put({"hat_id": 2, "event": "motor_stopped"})
         #     except Exception as exc:
         #         evt_q.put(
         #             {
-        #                 "hat": 2,
+        #                 "hat_id": 2,
         #                 "event": "error",
         #                 "message": f"motor stop failed: {type(exc).__name__}: {exc}",
         #             }
@@ -86,13 +86,13 @@ def run_hat2(cmd_q: Queue, evt_q: Queue) -> None:
                 motor_a.stop()
             except Exception:
                 pass
-            evt_q.put({"hat": 2, "event": "stopped"})
+            evt_q.put({"hat_id": 2, "event": "stopped"})
             running = False
 
         else:
             evt_q.put(
                 {
-                    "hat": 2,
+                    "hat_id": 2,
                     "event": "error",
                     "message": f"unknown action: {action}",
                 }

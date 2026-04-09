@@ -99,21 +99,21 @@ def main():
 
     p2 = Process(target=run_hat2, args=(hat2_cmd_q, hat2_evt_q), daemon=True)
     p2.start()
-    wait_for_event(hat2_evt_q, 2, "ready", timeout=20.0)
-    print("HAT 2 ready.")
+    #wait_for_event(hat2_evt_q, 2, "ready", timeout=20.0)
+    #print("HAT 2 ready.")
 
     time.sleep(5.0)
 
     p1 = Process(target=run_hat1, args=(hat1_cmd_q, hat1_evt_q), daemon=True)
     p1.start()
-    wait_for_event(hat1_evt_q, 1, "ready", timeout=20.0)
-    print("HAT 1 ready.")
+    #wait_for_event(hat1_evt_q, 1, "ready", timeout=20.0)
+    #print("HAT 1 ready.")
 
     try:
         time.sleep(1.0)
-        drain_events(hat2_evt_q, duration=1.0)
 
         wait_for_event(hat1_evt_q, 1, "ready", timeout=20.0)
+        drain_events(hat1_evt_q, duration=1.0)
         wait_for_event(hat2_evt_q, 2, "ready", timeout=20.0)
         print("Both HAT workers are ready.")
 

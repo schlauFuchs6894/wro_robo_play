@@ -23,7 +23,7 @@ def run_hat1(cmd_q: Queue, evt_q: Queue) -> None:
     motor_a = Motor("A")
     motor_a.set_default_speed(30)
 
-    evt_q.put({"hat": 1, "event": "ready"})
+    evt_q.put({"hat_id": 1, "event": "ready"})
 
     running = True
     while running:
@@ -37,7 +37,7 @@ def run_hat1(cmd_q: Queue, evt_q: Queue) -> None:
         if action == "read_distance":
             evt_q.put(
                 {
-                    "hat": 1,
+                    "hat_id": 1,
                     "event": "distance",
                     "value": None,
                 }
@@ -49,7 +49,7 @@ def run_hat1(cmd_q: Queue, evt_q: Queue) -> None:
                 motor_a.start(speed)
                 evt_q.put(
                     {
-                        "hat": 1,
+                        "hat_id": 1,
                         "event": "motor_started",
                         "speed": speed,
                     }
@@ -57,7 +57,7 @@ def run_hat1(cmd_q: Queue, evt_q: Queue) -> None:
             except Exception as exc:
                 evt_q.put(
                     {
-                        "hat": 1,
+                        "hat_id": 1,
                         "event": "error",
                         "message": f"motor start failed: {exc}",
                     }
@@ -70,7 +70,7 @@ def run_hat1(cmd_q: Queue, evt_q: Queue) -> None:
             except Exception as exc:
                 evt_q.put(
                     {
-                        "hat": 1,
+                        "hat_id": 1,
                         "event": "error",
                         "message": f"motor stop failed: {exc}",
                     }
@@ -81,13 +81,13 @@ def run_hat1(cmd_q: Queue, evt_q: Queue) -> None:
                 motor_a.stop()
             except Exception:
                 pass
-            evt_q.put({"hat": 1, "event": "stopped"})
+            evt_q.put({"hat_id": 1, "event": "stopped"})
             running = False
 
         else:
             evt_q.put(
                 {
-                    "hat": 1,
+                    "hat_id": 1,
                     "event": "error",
                     "message": f"unknown action: {action}",
                 }
