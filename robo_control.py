@@ -112,9 +112,12 @@ def main():
     try:
         time.sleep(1.0)
 
+        wait_for_event(hat2_evt_q, 2, "ready", timeout=20.0)
+        print("HAT2 workers are ready.")
+        print("wait for HAT1")
+       
         wait_for_event(hat1_evt_q, 1, "ready", timeout=20.0)
         drain_events(hat1_evt_q, duration=1.0)
-        wait_for_event(hat2_evt_q, 2, "ready", timeout=20.0)
         print("Both HAT workers are ready.")
 
         # if button_blau.is_pressed:
