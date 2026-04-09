@@ -81,7 +81,8 @@ def run_hat2(cmd_q: Queue, evt_q: Queue) -> None:
 
         elif action == "shutdown":
             try:
-                motor_a.stop()
+                #motor_a.stop()
+                print("[HAT2] shutdown")
             except Exception:
                 pass
             evt_q.put({"hat_id": 2, "event": "stopped"})

@@ -28,12 +28,12 @@ def wait_for_event(evt_q: Queue, hat_id: int, expected: str, timeout: float = 10
         except Empty:
             continue
 
-        if evt.get("hat") == hat_id and evt.get("event") == "error":
+        if evt.get("hat_id") == hat_id and evt.get("event") == "error":
             for item in buffer:
                 evt_q.put(item)
             raise RuntimeError(f"HAT {hat_id} error: {evt.get('message')}")
 
-        if evt.get("hat") == hat_id and evt.get("event") == expected:
+        if evt.get("hat_id") == hat_id and evt.get("event") == expected:
             for item in buffer:
                 evt_q.put(item)
             return evt
