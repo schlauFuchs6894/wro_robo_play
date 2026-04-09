@@ -13,8 +13,8 @@ GPIO_BUTTON_ROT = 20 #Pin 38
 GPIO_BUTTON_BLAU = 21 #Pin 40
 
 # Initialisiert GPIO 6 mit internem Pull-Up
-button_rot = Button(GPIO_BUTTON_ROT)
-button_blau = Button(GPIO_BUTTON_BLAU)
+#button_rot = Button(GPIO_BUTTON_ROT)
+#button_blau = Button(GPIO_BUTTON_BLAU)
 
 
 def wait_for_event(evt_q: Queue, hat_id: int, expected: str, timeout: float = 10.0):
@@ -117,24 +117,24 @@ def main():
         wait_for_event(hat2_evt_q, 2, "ready", timeout=20.0)
         print("Both HAT workers are ready.")
 
-        if button_blau.is_pressed:
-            print("Schalter ist GEDRÜCKT (Pin ist LOW)")
-        else:
-            print("Schalter ist OFFEN (Pin ist HIGH)")
+        # if button_blau.is_pressed:
+        #     print("Schalter ist GEDRÜCKT (Pin ist LOW)")
+        # else:
+        #     print("Schalter ist OFFEN (Pin ist HIGH)")
 
 
         print("Wait for button press...Blau")
 
-        while not button_blau.is_pressed:
-            # In pull-up mode, the pin is 0 (LOW) when the switch is pressed
-            time.sleep(0.1)
-            drain_events(hat1_evt_q, duration=1.0)
-            drain_events(hat2_evt_q, duration=1.0)
+        # while not button_blau.is_pressed:
+        #     # In pull-up mode, the pin is 0 (LOW) when the switch is pressed
+        #     time.sleep(0.1)
+        #     drain_events(hat1_evt_q, duration=1.0)
+        #     drain_events(hat2_evt_q, duration=1.0)
 
         while(True):
-            if button_rot.is_pressed:
-                print("Schalter ROT ist GEDRÜCKT (Pin ist LOW)")
-                break;
+            # if button_rot.is_pressed:
+            #     print("Schalter ROT ist GEDRÜCKT (Pin ist LOW)")
+            #     break;
             robo_loop()
  
     finally:
