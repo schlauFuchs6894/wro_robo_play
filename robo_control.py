@@ -21,6 +21,7 @@ class Robot:
     TICK_MODULO = 10
 
     def __init__(self):
+        set_start_method("spawn", force=True)  # ← must be BEFORE Robot()
         self.hat1_cmd_q = Queue()
         self.hat1_evt_q = Queue()
         self.hat2_cmd_q = Queue()
@@ -200,6 +201,7 @@ class Robot:
 
 def main():
 
+    #set_start_method("spawn", force=True)  # ← must be BEFORE Robot()
     robot = Robot()
     robot.start()
 
