@@ -19,16 +19,14 @@ def run_hat2(cmd_q: Queue, evt_q: Queue) -> None:
         sensor_d = ColorDistanceSensor("D")
         #motor_a = Motor("A")
         #motor_a.set_default_speed(30)
+        print(f"[HAT1] >")
 
     except Exception as exc:
-        evt_q.put(
-            {
-                "hat_id": 2,
-                "event": "error",
-                "message": f"init failed: {type(exc).__name__}: {exc}",
-            }
-        )
+        traceback.print_exc()
+        evt_q.put({"hat_id": 2, "event": "error", "message": f"{type(exc).__name__}: {exc}"})
         return
+
+
 
     evt_q.put({"hat_id": 2, "event": "ready"})
 

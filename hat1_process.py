@@ -14,15 +14,17 @@ def run_hat1(cmd_q: Queue, evt_q: Queue) -> None:
     print(f"[HAT1] process started, PID={os.getpid()}", flush=True)
     try:
         Hat(device="/dev/ttyAMA0", reset_gpio=4, boot0_gpio=22, debug=True)
+
+        #sensor_d = ColorDistanceSensor("D")
+        print(f"[HAT1] init SensorS and Actors")
+        motor_a = Motor("A")
+        motor_a.set_default_speed(30)
+        print(f"[HAT1] >")
+
     except Exception as exc:
         traceback.print_exc()
-        evt_q.put({"hat": 1, "event": "error", "message": f"{type(exc).__name__}: {exc}"})
+        evt_q.put({"hat_id": 1, "event": "error", "message": f"{type(exc).__name__}: {exc}"})
         return
-
-    #sensor_d = ColorDistanceSensor("D")
-    motor_a = Motor("A")
-    motor_a.set_default_speed(30)
-
     evt_q.put({"hat_id": 1, "event": "ready"})
 
     running = True
