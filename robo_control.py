@@ -1,0 +1,159 @@
+#!/usr/bin/env python3
+
+import time
+
+from multiprocessing import Process, Queue, set_start_method
+from queue import Empty
+from gpiozero import Button
+from signal import pause
+from hat1_process import run_hat1
+from hat2_process import run_hat2
+
+GPIO_BUTTON_ROT = 20 #Pin 38
+GPIO_BUTTON_BLAU = 21 #Pin 40
+
+# Initialisiert GPIO 6 mit internem Pull-Up
+button_rot = Button(GPIO_BUTTON_ROT)
+button_blau = Button(GPIO_BUTTON_BLAU)
+
+
+def wait_for_event(evt_q: Queue, hat_id: int, expected: str, timeout: float = 10.0):
+    deadline = time.time() + timeout
+    buffer = []
+
+    while time.time() < deadline:
+        remaining = max(0.0, deadline - time.time())
+        try:
+            evt = evt_q.get(timeout=min(0.2, remaining))
+        except Empty:
+            continue
+
+        if evt.get("hat") == hat_id and evt.get("event") == "error":
+            for item in buffer:
+                evt_q.put(item)
+            raise RuntimeError(f"HAT {hat_id} error: {evt.get('message')}")
+
+        if evt.get("hat") == hat_id and evt.get("event") == expected:
+            for item in buffer:
+                evt_q.put(item)
+            return evt
+
+        buffer.append(evt)
+
+    for item in buffer:
+        evt_q.put(item)
+
+    raise TimeoutError(f"Timeout waiting for hat {hat_id} event '{expected}'")
+
+
+def drain_events(evt_q: Queue, duration: float = 1.0):
+    deadline = time.time() + duration
+    while time.time() < deadline:
+        try:
+            evt = evt_q.get(timeout=0.1)
+        except Empty:
+            continue
+        print(f"EVENT: {evt}")
+
+def robo_loop():
+ 
+    # # 1) Read distance from Hat 1 Sensor D
+    # hat1_cmd_q.put({"action": "read_distance"})
+    # evt1 = wait_for_event(hat1_evt_q, 1, "distance", timeout=5.0)
+    # print(f"Hat 1 Sensor D distance: {evt1['value']}")
+
+    # # 2) Read distance from Hat 2 Sensor D
+    # hat2_cmd_q.put({"action": "read_distance"})
+    # evt2 = wait_for_event(hat2_evt_q, 2, "distance", timeout=5.0)
+    # print(f"Hat 2 Sensor D distance: {evt2['value']}")
+
+    # # 3) Run Motor 1 on Hat 1 Motor A
+    # hat1_cmd_q.put({"action": "motor_start", "speed": 30})
+    # wait_for_event(hat1_evt_q, 1, "motor_started", timeout=5.0)
+    # print("Hat 1 Motor A started.")
+
+    # # 4) Run Motor 2 on Hat 2 Motor A
+    # hat2_cmd_q.put({"action": "motor_start", "speed": 30})
+    # wait_for_event(hat2_evt_q, 2, "motor_started", timeout=5.0)
+    # print("Hat 2 Motor A started.")
+
+    # time.sleep(3.0)
+
+    # # Stop both motors again
+    # hat1_cmd_q.put({"action": "motor_stop"})
+    # hat2_cmd_q.put({"action": "motor_stop"})
+    # wait_for_event(hat1_evt_q, 1, "motor_stopped", timeout=5.0)
+    # wait_for_event(hat2_evt_q, 2, "motor_stopped", timeout=5.0)
+    print(".")
+
+
+
+
+def main():
+    set_start_method("spawn", force=True)
+
+    hat1_cmd_q = Queue()
+    hat1_evt_q = Queue()
+    hat2_cmd_q = Queue()
+    hat2_evt_q = Queue()
+
+    p2 = Process(target=run_hat2, args=(hat2_cmd_q, hat2_evt_q), daemon=True)
+    p2.start()
+    wait_for_event(hat2_evt_q, 2, "ready", timeout=20.0)
+    print("HAT 2 ready.")
+
+    time.sleep(5.0)
+
+    p1 = Process(target=run_hat1, args=(hat1_cmd_q, hat1_evt_q), daemon=True)
+    p1.start()
+    wait_for_event(hat1_evt_q, 1, "ready", timeout=20.0)
+    print("HAT 1 ready.")
+
+    try:
+        time.sleep(1.0)
+        drain_events(hat2_evt_q, duration=1.0)
+
+        wait_for_event(hat1_evt_q, 1, "ready", timeout=20.0)
+        wait_for_event(hat2_evt_q, 2, "ready", timeout=20.0)
+        print("Both HAT workers are ready.")
+
+        if button_blau.is_pressed:
+            print("Schalter ist GEDRÜCKT (Pin ist LOW)")
+        else:
+            print("Schalter ist OFFEN (Pin ist HIGH)")
+
+
+        print("Wait for button press...Blau")
+
+        while not button_blau.is_pressed:
+            # In pull-up mode, the pin is 0 (LOW) when the switch is pressed
+            time.sleep(0.1)
+            drain_events(hat1_evt_q, duration=1.0)
+            drain_events(hat2_evt_q, duration=1.0)
+
+        while(True):
+            if button_rot.is_pressed:
+                print("Schalter ROT ist GEDRÜCKT (Pin ist LOW)")
+                break;
+            robo_loop()
+ 
+    finally:
+        hat1_cmd_q.put({"action": "shutdown"})
+        hat2_cmd_q.put({"action": "shutdown"})
+
+        try:
+            wait_for_event(hat1_evt_q, 1, "stopped", timeout=5.0)
+        except Exception:
+            pass
+
+        try:
+            wait_for_event(hat2_evt_q, 2, "stopped", timeout=5.0)
+        except Exception:
+            pass
+
+        p1.join(timeout=2.0)
+        p2.join(timeout=2.0)
+
+
+if __name__ == "__main__":
+    main()
