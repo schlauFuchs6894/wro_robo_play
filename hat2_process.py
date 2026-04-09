@@ -17,8 +17,8 @@ def run_hat2(cmd_q: Queue, evt_q: Queue) -> None:
         )
         print(f"[HAT2] init SensorS and Actors")
         sensor_d = ColorDistanceSensor("D")
-        motor_a = Motor("A")
-        motor_a.set_default_speed(30)
+        #motor_a = Motor("A")
+        #motor_a.set_default_speed(30)
 
     except Exception as exc:
         evt_q.put(
@@ -54,32 +54,32 @@ def run_hat2(cmd_q: Queue, evt_q: Queue) -> None:
                     }
                 )
 
-        elif action == "motor_start":
-            speed = int(cmd.get("speed", 30))
-            try:
-                motor_a.start(speed)
-                evt_q.put({"hat": 2, "event": "motor_started", "speed": speed})
-            except Exception as exc:
-                evt_q.put(
-                    {
-                        "hat": 2,
-                        "event": "error",
-                        "message": f"motor start failed: {type(exc).__name__}: {exc}",
-                    }
-                )
+        # elif action == "motor_start":
+        #     speed = int(cmd.get("speed", 30))
+        #     try:
+        #         motor_a.start(speed)
+        #         evt_q.put({"hat": 2, "event": "motor_started", "speed": speed})
+        #     except Exception as exc:
+        #         evt_q.put(
+        #             {
+        #                 "hat": 2,
+        #                 "event": "error",
+        #                 "message": f"motor start failed: {type(exc).__name__}: {exc}",
+        #             }
+        #         )
 
-        elif action == "motor_stop":
-            try:
-                motor_a.stop()
-                evt_q.put({"hat": 2, "event": "motor_stopped"})
-            except Exception as exc:
-                evt_q.put(
-                    {
-                        "hat": 2,
-                        "event": "error",
-                        "message": f"motor stop failed: {type(exc).__name__}: {exc}",
-                    }
-                )
+        # elif action == "motor_stop":
+        #     try:
+        #         motor_a.stop()
+        #         evt_q.put({"hat": 2, "event": "motor_stopped"})
+        #     except Exception as exc:
+        #         evt_q.put(
+        #             {
+        #                 "hat": 2,
+        #                 "event": "error",
+        #                 "message": f"motor stop failed: {type(exc).__name__}: {exc}",
+        #             }
+        #         )
 
         elif action == "shutdown":
             try:

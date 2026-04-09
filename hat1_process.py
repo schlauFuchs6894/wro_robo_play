@@ -19,7 +19,7 @@ def run_hat1(cmd_q: Queue, evt_q: Queue) -> None:
         evt_q.put({"hat": 1, "event": "error", "message": f"{type(exc).__name__}: {exc}"})
         return
 
-    sensor_d = ColorDistanceSensor("D")
+    #sensor_d = ColorDistanceSensor("D")
     motor_a = Motor("A")
     motor_a.set_default_speed(30)
 
@@ -35,23 +35,13 @@ def run_hat1(cmd_q: Queue, evt_q: Queue) -> None:
         action = cmd.get("action")
 
         if action == "read_distance":
-            try:
-                distance = sensor_d.get_distance()
-                evt_q.put(
-                    {
-                        "hat": 1,
-                        "event": "distance",
-                        "value": distance,
-                    }
-                )
-            except Exception as exc:
-                evt_q.put(
-                    {
-                        "hat": 1,
-                        "event": "error",
-                        "message": f"distance read failed: {exc}",
-                    }
-                )
+            evt_q.put(
+                {
+                    "hat": 1,
+                    "event": "distance",
+                    "value": None,
+                }
+            )
 
         elif action == "motor_start":
             speed = int(cmd.get("speed", 30))
