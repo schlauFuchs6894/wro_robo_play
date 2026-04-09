@@ -41,7 +41,7 @@ class Robot:
     def timeExpired(self):
         return (time.time() >= self.deadline)
 
-    def start(self, hat1_timeout: float = 20.0, hat2_timeout: float = 20.0):
+    def start(self, hat_timeout: float = 20.0):
         """Start both HAT worker processes and wait until ready."""
         set_start_method("spawn", force=True)
 
@@ -53,9 +53,10 @@ class Robot:
         self._p1 = Process(target=run_hat1, args=(self.hat1_cmd_q, self.hat1_evt_q), daemon=True)
         self._p1.start()
 
-        self.wait_for_event(self.hat2_evt_q, 2, "ready", timeout=hat2_timeout)
+        time.sleep(1.0)
+        self.wait_for_event(self.hat2_evt_q, 2, "ready", timeout=hat_timeout)
         print("HAT 2 ready.")
-        self.wait_for_event(self.hat1_evt_q, 1, "ready", timeout=hat1_timeout)
+        self.wait_for_event(self.hat1_evt_q, 1, "ready", timeout=hat_timeout)
         print("HAT 1 ready.")
 
     def stop(self):
