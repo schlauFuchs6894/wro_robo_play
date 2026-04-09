@@ -19,7 +19,7 @@ def run_hat2(cmd_q: Queue, evt_q: Queue) -> None:
         sensor_d = ColorDistanceSensor("D")
         #motor_a = Motor("A")
         #motor_a.set_default_speed(30)
-        print(f"[HAT1] >")
+        print(f"[HAT2] >")
 
     except Exception as exc:
         traceback.print_exc()
