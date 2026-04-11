@@ -43,7 +43,7 @@ def __init__():
         debug=False,
     )
     fahren = MotorPair('A', 'B', hat_instance=hat1._instance)
-    colorsensor = ColorDistanceSensor('C', hat_instance=hat1._instance).get_color()
+    colorsensor = ColorDistanceSensor('C', hat_instance=hat1._instance)
     print("Init done")
 
 def run(self):
