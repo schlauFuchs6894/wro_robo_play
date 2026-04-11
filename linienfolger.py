@@ -16,10 +16,10 @@ H1_BOOT_GPIO = 22
 H2_RST_GPIO = 5
 H2_BOOT_GPIO = 6
 
-hat1 = None
-hat2 = None
-fahren = None
-colorsensor = None
+hat1: Hat = None
+hat2: Hat = None
+fahren: MotorPair = None
+colorsensor: ColorDistanceSensor = None
 button_blau: Button = None
 button_rot: Button = None
 
