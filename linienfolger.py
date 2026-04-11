@@ -50,7 +50,7 @@ def setup():
 
 def run():
 
-    while True:
+    while not button_rot.is_pressed:
         if colorsensor.get_color() == 'black':
             fahren.start(40, 40)
         else:
