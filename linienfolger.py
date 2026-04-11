@@ -16,20 +16,21 @@ H1_BOOT_GPIO = 22
 H2_RST_GPIO = 5
 H2_BOOT_GPIO = 6
 
-# hat1: Hat = None
-# hat2: Hat = None
-# fahren: MotorPair = None
-# colorsensor: ColorDistanceSensor = None
-#button_blau: Button = None
-#button_rot: Button = None
+hat1: Hat = None
+hat2: Hat = None
+fahren: MotorPair = None
+colorsensor: ColorDistanceSensor = None
+button_blau: Button = None
+button_rot: Button = None
 
 THRESHOLD_DISTANCE = 15
 # init build hat
 
-def __init__():
+def setup():
+    global button_rot, button_blau, hat1, hat2, fahren, colorsensor
     # Initialisiert GPIO 6 mit internem Pull-Up
- #   button_rot = Button(GPIO_BUTTON_ROT)
- #   button_blau = Button(GPIO_BUTTON_BLAU)
+    button_rot = Button(GPIO_BUTTON_ROT)
+    button_blau = Button(GPIO_BUTTON_BLAU)
     deregister_all()
     hat1 = Hat(
         device="/dev/ttyAMA0",
@@ -57,9 +58,7 @@ def run():
 
 
 def main():
-    __init__()
-    button_rot = Button(GPIO_BUTTON_ROT)
-    button_blau = Button(GPIO_BUTTON_BLAU)
+    setup()
 
     print("Wait on Button blau!")
     while  not button_blau.is_pressed:
