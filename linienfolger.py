@@ -20,8 +20,8 @@ hat1 = None
 hat2 = None
 fahren = None
 colorsensor = None
-button_blau = None
-button_rot = None   
+button_blau: Button = None
+button_rot: Button = None
 
 THRESHOLD_DISTANCE = 15
 # init build hat
