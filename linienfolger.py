@@ -3,6 +3,7 @@
 import time
 
 from buildhat import Hat, Motor, MotorPair,ColorDistanceSensor, Light 
+from buildhat.devices import Device
 from buildhat.exc import DeviceError, MotorError
 from gpiozero import Button
 from signal import pause
@@ -29,7 +30,7 @@ def __init__():
     # Initialisiert GPIO 6 mit internem Pull-Up
     button_rot = Button(GPIO_BUTTON_ROT)
     button_blau = Button(GPIO_BUTTON_BLAU)
- 
+    deregister_all()
     hat1 = Hat(
         device="/dev/ttyAMA0",
         reset_gpio=H1_RST_GPIO,
@@ -68,6 +69,22 @@ def main():
     while  not button_rot.is_pressed:
         time.sleep(0.2)    
     print("THE END!")  
+
+
+def deregister_all():
+    """Remove all HATs from the Device registry and clear port tracking.
+
+    Call this after tests complete to leave the process in a clean state,
+    e.g. when multiple test modules are run in the same interpreter session.
+    """
+    for bhat in list(Device._registry.values()):
+        try:
+            bhat.shutdown()
+        except Exception:
+            pass
+    Device._registry.clear()
+    Device._default_key = None
+    Device._used.clear()
 
 if __name__ == '__main__':
   main()
