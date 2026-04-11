@@ -47,7 +47,7 @@ def __init__():
     colorsensor = ColorDistanceSensor('C', hat_instance=hat1._instance)
     print("Init done")
 
-def run(self):
+def run():
 
     while True:
         if colorsensor.get_color() == 'black':
