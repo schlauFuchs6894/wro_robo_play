@@ -2,7 +2,7 @@
 
 import time
 
-from buildhat import Hat, Motor, MotorPair,ColorDistanceSensor, Light 
+from buildhat import Hat, Motor, MotorPair,ColorDistanceSensor,ColorSensor, Light, DistanceSensor
 from buildhat.devices import Device
 from buildhat.exc import DeviceError, MotorError
 from gpiozero import Button
@@ -16,18 +16,26 @@ H1_BOOT_GPIO = 22
 H2_RST_GPIO = 5
 H2_BOOT_GPIO = 6
 
+
 hat1: Hat = None
 hat2: Hat = None
 fahren: MotorPair = None
-colorsensor: ColorDistanceSensor = None
+lift: Motor = None
+gabel: Motor = None
+distance: DistanceSensor = None
+color_obj_sensor: ColorSensor = None
+color_sensor: ColorDistanceSensor = None
 button_blau: Button = None
 button_rot: Button = None
+object_color: int = None
 
 THRESHOLD_DISTANCE = 15
+DEFAULT_DIST = 10
+ROTATIONS_PER_CM = 0.1
 # init build hat
 
 def setup():
-    global button_rot, button_blau, hat1, hat2, fahren, colorsensor
+    global button_rot, button_blau, hat1, hat2, lift, gabel,fahren, color_obj_sensor, color_sensor, distance
     # Initialisiert GPIO 6 mit internem Pull-Up
     button_rot = Button(GPIO_BUTTON_ROT)
     button_blau = Button(GPIO_BUTTON_BLAU)
@@ -44,32 +52,13 @@ def setup():
         boot0_gpio=H2_BOOT_GPIO,
         debug=False,
     )
+    distance = DistanceSensor('D', hat_instance=hat1._instance)
     fahren = MotorPair('A', 'B', hat_instance=hat1._instance)
-    colorsensor = ColorDistanceSensor('C', hat_instance=hat1._instance)
+    color_sensor = ColorSensor('C', hat_instance=hat1._instance)
+    color_obj_sensor = ColorDistanceSensor('C', hat_instance=hat1._instance)
+    lift = Motor('A', hat_instance=hat2._instance)
+    gabel = Motor('B', hat_instance=hat2._instance)
     print("Init done")
-
-def run():
-
-    while not button_rot.is_pressed:
-        if colorsensor.get_color() == 'black':
-            fahren.start(40, 40)
-        else:
-            fahren.start(-40, -40)
-
-
-def main():
-    setup()
-
-    print("Wait on Button blau!")
-    while  not button_blau.is_pressed:
-        time.sleep(0.2)
-
-    run()      
-
-    print("Wait on Button rot!")
-    while  not button_rot.is_pressed:
-        time.sleep(0.2)    
-    print("THE END!")  
 
 
 def deregister_all():
@@ -86,6 +75,49 @@ def deregister_all():
     Device._registry.clear()
     Device._default_key = None
     Device._used.clear()
+
+def ready_wait_for_start():
+    print("Wait on Button blau!")
+    while  not button_blau.is_pressed:
+        time.sleep(0.2)    
+
+def run():
+    while not button_rot.is_pressed:
+       global object_color
+       linenfolger(50)
+       object_color = color_obj_sensor.get_color()
+       print("Object color: ", object_color)
+       aufluepfen()
+       ruekwaerts(50)
+
+def ruekwaerts(distance=DEFAULT_DIST):
+    rotations = distance * ROTATIONS_PER_CM
+    fahren.run_for_rotations(rotations, 40, 40)
+    fahren.stop()
+
+def aufluepfen():
+    lift.run_for_rotations(1, 50)
+    gabel.run_for_rotations(1, 50)
+
+
+def linenfolger(distanceuntilstop=THRESHOLD_DISTANCE):
+    while distance.get_distance() > distanceuntilstop:
+        if color_sensor.get_color() == 'black':
+            fahren.start(40, 40)
+        else:
+            fahren.start(-40, -40)
+    fahren.stop()
+    
+
+def main():
+    setup()
+    ready_wait_for_start()
+    run()      
+
+    print("Wait on Button rot!")
+    while  not button_rot.is_pressed:
+        time.sleep(0.2)    
+    print("THE END!")  
 
 if __name__ == '__main__':
   main()
