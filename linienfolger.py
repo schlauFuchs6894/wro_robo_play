@@ -52,12 +52,12 @@ def setup():
         boot0_gpio=H2_BOOT_GPIO,
         debug=False,
     )
-    distance = DistanceSensor('D', hat_instance=hat1._instance)
     fahren = MotorPair('A', 'B', hat_instance=hat1._instance)
     color_sensor = ColorSensor('C', hat_instance=hat1._instance)
-    color_obj_sensor = ColorDistanceSensor('C', hat_instance=hat1._instance)
+    distance = DistanceSensor('D', hat_instance=hat1._instance)
     lift = Motor('A', hat_instance=hat2._instance)
     gabel = Motor('B', hat_instance=hat2._instance)
+    color_obj_sensor = ColorDistanceSensor('C', hat_instance=hat2._instance)
     print("Init done")
 
 
