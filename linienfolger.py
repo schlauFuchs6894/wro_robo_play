@@ -119,7 +119,7 @@ def run():
        object_color = color_obj_sensor.get_color()
        line_color = color_sensor.get_color()
        distance_value = distance.get_distance()
-       print("Color", line_color
+       print("Color", line_color)
        print("Distance: ", distance_value)
        print("Object color: ", object_color)
 
