@@ -81,14 +81,7 @@ def ready_wait_for_start():
     while  not button_blau.is_pressed:
         time.sleep(0.2)    
 
-def run():
-    global object_color
-    while not button_rot.is_pressed:
-       print(distance.get_distance())
-       linenfolger(50)
-       object_color = color_obj_sensor.get_color()
-       print("Object color: ", object_color)
-       ruekwaerts(50)
+
 
 def ruekwaerts(distance=DEFAULT_DIST):
     rotations = distance * ROTATIONS_PER_CM
@@ -108,6 +101,14 @@ def linenfolger(distanceuntilstop=THRESHOLD_DISTANCE):
             fahren.start(40, -70)
     fahren.stop()
     
+def run():
+    global object_color
+    while not button_rot.is_pressed:
+       print(distance.get_distance())
+       linenfolger(50)
+       object_color = color_obj_sensor.get_color()
+       print("Object color: ", object_color)
+       ruekwaerts(50)
 
 def main():
     setup()
