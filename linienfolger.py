@@ -100,9 +100,9 @@ def linenfolger(distanceuntilstop=THRESHOLD_DISTANCE):
 
 def linenfolger_update():
         if color_sensor.get_color() == 'black':
-            fahren.start(30, -15)
+            fahren.start(50, -15)
         else:
-            fahren.start(15, -30)
+            fahren.start(15, -50)
 
 
 def run():
@@ -110,6 +110,7 @@ def run():
     while not button_rot.is_pressed:
        linenfolger_update()
  
+    fahren.stop() 
     while button_rot.is_pressed:
         # wait on release
         time.sleep(0.2)
