@@ -110,16 +110,15 @@ def linenfolger_update():
 def run():
     global object_color
 
-    while not button_blau.is_pressed:
-        while not color_sensor.get_color() == 'white':
-            print(color_sensor.get_color())
-            fahren.start(30, -30)
+    while not color_sensor.get_color() == 'white':
         print(color_sensor.get_color())
-        fahren.stop()
-        fahren.run_for_rotations(1, 30, 30)
-        fahren.run_for_rotations(3, 30, -30)
-        fahren.run_for_rotations(1, -30, -30)
-        fahren.run_for_rotations(3, 30, -30)
+        fahren.start(30, -30)
+    print("c", color_sensor.get_color())
+    fahren.stop()
+    fahren.run_for_rotations(1, 30, 30)
+    fahren.run_for_rotations(3, 30, -30)
+    fahren.run_for_rotations(1, -30, -30)
+    fahren.run_for_rotations(3, 30, -30)
 
 
 def main():
@@ -128,9 +127,9 @@ def main():
     run()      
 
     print("Wait on Button rot!")
-    while  not button_rot.is_pressed:
-        time.sleep(0.2)    
-    print("THE END!")  
+    while not button_rot.is_pressed:
+        time.sleep(0.2)
+    print("THE END!")
 
 if __name__ == '__main__':
   main()
