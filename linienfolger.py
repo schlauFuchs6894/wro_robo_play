@@ -83,6 +83,7 @@ def ready_wait_for_start():
 
 def run():
     while not button_rot.is_pressed:
+       print(distance.get_distance())
        global object_color
        linenfolger(50)
        object_color = color_obj_sensor.get_color()
@@ -96,16 +97,16 @@ def ruekwaerts(distance=DEFAULT_DIST):
     fahren.stop()
 
 def aufluepfen():
-    lift.run_for_rotations(1, 50)
-    gabel.run_for_rotations(1, 50)
+    lift.run_for_rotations(1, 50)                                        
+    gabel.run_for_degrees(180, 50)
 
 
 def linenfolger(distanceuntilstop=THRESHOLD_DISTANCE):
     while distance.get_distance() > distanceuntilstop:
         if color_sensor.get_color() == 'black':
-            fahren.start(40, 40)
+            fahren.start(70, -40)
         else:
-            fahren.start(-40, -40)
+            fahren.start(40, -70)
     fahren.stop()
     
 
