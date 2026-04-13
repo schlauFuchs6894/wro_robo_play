@@ -96,9 +96,9 @@ def aufluepfen():
 def linenfolger(distanceuntilstop=THRESHOLD_DISTANCE):
     while distance.get_distance() > distanceuntilstop:
         if color_sensor.get_color() == 'black':
-            fahren.start(50, -20)
+            fahren.start(30, -15)
         else:
-            fahren.start(20, -50)
+            fahren.start(15, -30)
     fahren.stop()
     
 def run():
@@ -108,7 +108,6 @@ def run():
        linenfolger(50)
        object_color = color_obj_sensor.get_color()
        print("Object color: ", object_color)
-       ruekwaerts(50)
 
 def main():
     setup()
