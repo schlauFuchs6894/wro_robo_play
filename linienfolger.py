@@ -100,9 +100,11 @@ def linenfolger(distanceuntilstop=THRESHOLD_DISTANCE):
 
 def linenfolger_update():
         if color_sensor.get_color() == 'black':
-            fahren.start(50, -15)
+            print("rechts")
+            fahren.start(30, -10)
         else:
-            fahren.start(15, -50)
+            print("links")
+            fahren.start(10, -30)
 
 
 def run():
