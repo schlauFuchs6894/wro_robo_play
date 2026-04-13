@@ -114,12 +114,11 @@ def run():
         while not color_sensor.get_color() == 'white':
             fahren.start(30, -30)
         fahren.stop()
-        while not button_rot.is_pressed:
 
-            fahren.run_for_rotations(1, 30, 30)
-            fahren.run_for_rotations(3, 30, -30)
-            fahren.run_for_rotations(1, -30, -30)
-            fahren.run_for_rotations(3, 30, -30)
+        fahren.run_for_rotations(1, 30, 30)
+        fahren.run_for_rotations(3, 30, -30)
+        fahren.run_for_rotations(1, -30, -30)
+        fahren.run_for_rotations(3, 30, -30)
 
 
 def main():
