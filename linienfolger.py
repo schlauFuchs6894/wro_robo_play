@@ -82,18 +82,17 @@ def ready_wait_for_start():
         time.sleep(0.2)    
 
 def run():
+    global object_color
     while not button_rot.is_pressed:
        print(distance.get_distance())
-       global object_color
        linenfolger(50)
        object_color = color_obj_sensor.get_color()
        print("Object color: ", object_color)
-       aufluepfen()
        ruekwaerts(50)
 
 def ruekwaerts(distance=DEFAULT_DIST):
     rotations = distance * ROTATIONS_PER_CM
-    fahren.run_for_rotations(rotations, 40, 40)
+    fahren.run_for_rotations(rotations, 40, -40)
     fahren.stop()
 
 def aufluepfen():
