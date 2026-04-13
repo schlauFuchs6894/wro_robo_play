@@ -17,7 +17,6 @@ H1_BOOT_GPIO = 22
 H2_RST_GPIO = 5
 H2_BOOT_GPIO = 6
 
-
 hat1: Hat = None
 hat2: Hat = None
 fahren: MotorPair = None
@@ -110,15 +109,17 @@ def linenfolger_update():
 
 def run():
     global object_color
-    while not button_rot.is_pressed:
+
+    while not button_blau.is_pressed:
         while not color_sensor.get_color() == 'white':
             fahren.start(30, -30)
         fahren.stop()
+        while not button_rot.is_pressed:
 
-        #fahren.run_for_rotations(1, 30, 30)
-        #fahren.run_for_rotations(3, 30, -30)
-        #fahren.run_for_rotations(1, -30, -30)
-        #fahren.run_for_rotations(3, 30, -30)
+            fahren.run_for_rotations(1, 30, 30)
+            fahren.run_for_rotations(3, 30, -30)
+            fahren.run_for_rotations(1, -30, -30)
+            fahren.run_for_rotations(3, 30, -30)
 
 
 def main():
