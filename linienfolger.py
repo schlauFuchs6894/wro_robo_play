@@ -29,7 +29,7 @@ button_blau: Button = None
 button_rot: Button = None
 object_color: int = None
 
-THRESHOLD_DISTANCE = 15
+THRESHOLD_DISTANCE = 100
 DEFAULT_DIST = 10
 ROTATIONS_PER_CM = 0.1
 # init build hat
@@ -95,18 +95,32 @@ def aufluepfen():
 
 def linenfolger(distanceuntilstop=THRESHOLD_DISTANCE):
     while distance.get_distance() > distanceuntilstop:
+       linenfolger_update()
+    fahren.stop()
+
+def linenfolger_update():
         if color_sensor.get_color() == 'black':
             fahren.start(30, -15)
         else:
             fahren.start(15, -30)
-    fahren.stop()
-    
+
+
 def run():
     global object_color
     while not button_rot.is_pressed:
-       print(distance.get_distance())
-       linenfolger(50)
+       linenfolger_update()
+ 
+    while button_rot.is_pressed:
+        # wait on release
+        time.sleep(0.2)
+    print("Stop Sensor read with RED!")
+    while not button_rot.is_pressed:
+       # Update sensor values
        object_color = color_obj_sensor.get_color()
+       line_color = color_sensor.get_color()
+       distance_value = distance.get_distance()
+       print("Color", line_color
+       print("Distance: ", distance_value)
        print("Object color: ", object_color)
 
 def main():
