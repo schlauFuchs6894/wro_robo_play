@@ -96,9 +96,9 @@ def aufluepfen():
 def linenfolger(distanceuntilstop=THRESHOLD_DISTANCE):
     while distance.get_distance() > distanceuntilstop:
         if color_sensor.get_color() == 'black':
-            fahren.start(70, -40)
+            fahren.start(50, -20)
         else:
-            fahren.start(40, -70)
+            fahren.start(20, -50)
     fahren.stop()
     
 def run():
