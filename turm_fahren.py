@@ -89,7 +89,7 @@ def ruekwaerts(distance=DEFAULT_DIST):
     fahren.stop()
 
 def aufluepfen():
-    lift.run_for_rotations(1, 50)                                        
+    lift.run_for_rotations(1, 50)                                       
     gabel.run_for_degrees(180, 50)
 
 
@@ -109,16 +109,13 @@ def linenfolger_update():
 
 def run():
     global object_color
-
-    while not color_sensor.get_color() == 'white':
-        print(color_sensor.get_color())
+    while not distance.get_distance() < 60:
+        print("Distance: ", distance.get_distance())
         fahren.start(30, -30)
-    print("c", color_sensor.get_color())
     fahren.stop()
-    fahren.run_for_rotations(1, 30, 30)
-    fahren.run_for_rotations(3, 30, -30)
-    fahren.run_for_rotations(1, -30, -30)
-    fahren.run_for_rotations(3, 30, -30)
+    gabel.run_for_degrees(180, -50)
+    lift.run_for_degrees(90, 50)
+    gabel.run_for_degrees(180, 50)
 
 
 def main():
