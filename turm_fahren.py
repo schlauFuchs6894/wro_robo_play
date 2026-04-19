@@ -31,7 +31,7 @@ object_color: int = None
 
 THRESHOLD_DISTANCE = 100
 DEFAULT_DIST = 10
-ROTATIONS_PER_CM = 0.1
+ROTATIONS_PER_CM = 17
 # init build hat
 
 def setup():
@@ -58,6 +58,7 @@ def setup():
     lift = Motor('A', hat_instance=hat2._instance)
     gabel = Motor('B', hat_instance=hat2._instance)
     color_obj_sensor = ColorDistanceSensor('C', hat_instance=hat2._instance)
+    fahren.set_default_speed(50)
     print("Init done")
 
 
@@ -108,14 +109,23 @@ def linenfolger_update():
 
 
 def run():
-    global object_color
-    while not distance.get_distance() < 60:
-        print("Distance: ", distance.get_distance())
-        fahren.start(30, -30)
-    fahren.stop()
-    gabel.run_for_degrees(180, -50)
-    lift.run_for_degrees(90, 50)
-    gabel.run_for_degrees(180, 50)
+    gerade1 = ROTATIONS_PER_CM * 22  
+    fahren.run_for_rotations(gerade1)
+    NUNZIG_GRAD = 1.5
+    # 90° nach links
+    fahren.run_for_rotations( NUNZIG_GRAD, 40, 40)
+
+    # Geradeaus 17 cm
+    gerade2 = ROTATIONS_PER_CM * 17  
+    fahren.run_for_rotations(gerade2)
+    
+     # 90° nach rechts
+    fahren.run_for_rotations( -NUNZIG_GRAD, 40, 40)
+
+    # Geradeaus 16 cm
+    gerade3 = ROTATIONS_PER_CM * 16
+    fahren.run_for_rotations(gerade3)
+
 
 
 def main():
