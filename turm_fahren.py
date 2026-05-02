@@ -31,7 +31,7 @@ object_color: int = None
 
 THRESHOLD_DISTANCE = 100
 DEFAULT_DIST = 10
-ROTATIONS_PER_CM = 17
+ROTATIONS_PER_CM = 1.0 / 17.0
 # init build hat
 
 def setup():
@@ -52,6 +52,8 @@ def setup():
         boot0_gpio=H2_BOOT_GPIO,
         debug=False,
     )
+    print(hat1.get(), hat2.get())
+    
     fahren = MotorPair('A', 'B', hat_instance=hat1._instance)
     color_sensor = ColorSensor('C', hat_instance=hat1._instance)
     distance = DistanceSensor('D', hat_instance=hat1._instance)
@@ -59,6 +61,9 @@ def setup():
     gabel = Motor('B', hat_instance=hat2._instance)
     color_obj_sensor = ColorDistanceSensor('C', hat_instance=hat2._instance)
     fahren.set_default_speed(50)
+    fahren.stop()
+    gabel.stop()
+    lift.stop()
     print("Init done")
 
 
@@ -90,8 +95,9 @@ def ruekwaerts(distance=DEFAULT_DIST):
     fahren.stop()
 
 def aufluepfen():
-    lift.run_for_rotations(1, 50)                                       
-    gabel.run_for_degrees(180, 50)
+    lift.run_for_rotations(-2, 30)                                       
+    gabel.run_for_degrees(-180, 50)
+    lift.run_for_rotations(2, 30)
 
 
 def linenfolger(distanceuntilstop=THRESHOLD_DISTANCE):
@@ -109,33 +115,44 @@ def linenfolger_update():
 
 
 def run():
+    fahren.stop()
+    time.sleep(4)
     gerade1 = ROTATIONS_PER_CM * 22  
-    fahren.run_for_rotations(gerade1)
-    NUNZIG_GRAD = 1.5
-    # 90° nach links
-    fahren.run_for_rotations( NUNZIG_GRAD, 40, 40)
-
-    # Geradeaus 17 cm
-    gerade2 = ROTATIONS_PER_CM * 17  
-    fahren.run_for_rotations(gerade2)
+    fahren.run_for_rotations(gerade1,20,-20)
+    NUNZIG_GRAD = 0.65
+    gerade2 = ROTATIONS_PER_CM * 11
     
-     # 90° nach rechts
-    fahren.run_for_rotations( -NUNZIG_GRAD, 40, 40)
+    # 90° nach links
+ 
+    fahren.run_for_rotations(NUNZIG_GRAD, 40, 40)
+    
+    fahren.run_for_rotations(gerade2,20,-20)
+    
+    fahren.run_for_rotations(0.67, -40, -40)
+    
+    fahren.run_for_rotations(ROTATIONS_PER_CM * 13,20,-20)
+    aufluepfen()
+    fahren.run_for_rotations(NUNZIG_GRAD, -40, -40)
+    fahren.run_for_rotations(2, 30, -30)
+    fahren.run_for_rotations(NUNZIG_GRAD, -40, -40)
 
-    # Geradeaus 16 cm
-    gerade3 = ROTATIONS_PER_CM * 16
-    fahren.run_for_rotations(gerade3)
-
+    while not color_sensor.get_color == "black":
+        fahren.start(20, -20)
+        time.slep(0.1)
+    else:
+        fahren.stop()
+    fahren.run_for_rotations(NUNZIG_GRAD, 40, 40)
+    
 
 
 def main():
     setup()
-    ready_wait_for_start()
+    #ready_wait_for_start()
     run()      
 
     print("Wait on Button rot!")
     while not button_rot.is_pressed:
-        time.sleep(0.2)
+        time.sleep(0.1)
     print("THE END!")
 
 if __name__ == '__main__':
