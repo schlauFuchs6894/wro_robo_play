@@ -1,3 +1,4 @@
+from buildhat.devices import Device
 import time
 
 from buildhat import (
@@ -49,6 +50,7 @@ class RoboState:
         self.motor_right = None
         self.lift = None
         self.gabel = None
+        self.fahren = None # motor pair
 
         self.distance = None
         self.obj_color_sensor = None
@@ -65,11 +67,24 @@ def setup():
     robo.button_blau = Button(GPIO_BUTTON_BLAU)
 
     robo.hats, robo.hats_info = init_hats()
-    robo.sens_act = create_sens_act(robo.hats, robo.hats_info)
 
-    robo.motor_left = robo.sens_act["Hat1"]["motor1"]
-    robo.motor_right = robo.sens_act["Hat1"]["motor2"]
-    robo.motor_right.reverse()
+    # 1. Manuell reservieren (MotorPair)
+    robo.fahren = create_motor_pair(
+        left_port="A",
+        right_port="B",
+        hat_name="Hat1",
+    )
+
+    # 2. Auto-Init (überspringt belegte Ports)
+    robo.sens_act = create_sens_act(
+        robo.hats,
+        robo.hats_info,
+        skip_used_ports=True
+    )
+
+#     robo.motor_left = robo.sens_act["Hat1"]["motor1"]
+#     robo.motor_right = robo.sens_act["Hat1"]["motor2"]
+#     robo.motor_right.reverse()
 
     robo.color_sensor = robo.sens_act["Hat1"]["colorSensor1"]
     robo.distance = robo.sens_act["Hat1"]["distanceSensor1"]
@@ -78,8 +93,13 @@ def setup():
     robo.lift = robo.sens_act["Hat2"]["motor2"]
 
     robo.obj_color_sensor = robo.sens_act["Hat2"]["colorDistanceSensor1"]
+    
+    # create a motre pair fahren.
+    #robo.motor_right.reverse()
+    #robo.fahren = init_motor_pair(hat_name="Hat1")
 
     stop_all()
+
     set_default()
 
     print("Init done")
@@ -126,16 +146,92 @@ def print_hats_info(hats_info):
                 print(f"    {key}: {value}")
 
 
-def create_sens_act(hats, hats_info):
+def release_port(port, hat_instance):
+    """
+    Entfernt ein Device von einem bestimmten Port
+    """
+
+    key = (hat_instance, port)
+
+    dev = Device._registry.get(key)
+
+    if dev:
+        try:
+            dev.stop()
+        except Exception:
+            pass
+
+        try:
+            dev.shutdown()
+        except Exception:
+            pass
+
+        del Device._registry[key]
+
+    # Port freigeben
+    Device._used.discard(port)
+
+    print(f"Released port {port}")
+    
+
+def create_sens_act(hats, hats_info, skip_used_ports=False):
     sens_act = {}
 
     for hat_name, hat in hats.items():
         ports = hats_info.get(hat_name, {})
-        sens_act[hat_name] = create_devices(ports, hat._instance)
+        filtered_ports = {}
+
+        for port, info in ports.items():
+            # skip already used ports
+            if skip_used_ports and port in Device._used:
+                print(f"Skip {hat_name}:{port} (already used)")
+                continue
+
+            filtered_ports[port] = info
+
+        sens_act[hat_name] = create_devices(
+            filtered_ports,
+            hat._instance
+        )
 
     return sens_act
 
 
+def create_motor_pair(left_port, right_port, hat_name="Hat1"):
+    """
+    Erstellt ein MotorPair für die angegebenen Ports und Hat.
+
+    Parameters:
+        left_port (str): z.B. 'A'
+        right_port (str): z.B. 'B'
+        hat_name (str): z.B. 'Hat1'
+
+    Returns:
+        MotorPair
+    """
+
+    if hat_name not in robo.hats:
+        raise ValueError(f"Unknown hat: {hat_name}")
+
+    hat_instance = robo.hats[hat_name]._instance
+
+    try:
+        #release_port(left_port, hat_instance)
+        #release_port(right_port, hat_instance)
+        
+        mp = MotorPair(
+            left_port,
+            right_port,
+            hat_instance=hat_instance,
+        )
+        print(f"MotorPair created on {hat_name}: {left_port}-{right_port}")
+        return mp
+
+    except Exception as e:
+        raise RuntimeError(
+            f"Failed to create MotorPair on {hat_name} ({left_port},{right_port}): {e}"
+        )
+    
 def to_var_name(name, counter):
     return name[0].lower() + name[1:] + str(counter)
 
@@ -170,18 +266,24 @@ def create_devices(ports, hat_instance):
 
 
 def set_default():
-    robo.motor_left.set_default_speed(20)
-    robo.motor_right.set_default_speed(-20)
-    robo.lift.set_default_speed(20)
-    robo.gabel.set_default_speed(20)
+    for motor in [
+        #robo.motor_left,
+        #robo.motor_right,
+        robo.lift,
+        robo.gabel,
+        robo.fahren,
+    ]:
+        if motor is not None:
+            motor.set_default_speed(20)
 
 
 def stop_all():
     for motor in [
-        robo.motor_left,
-        robo.motor_right,
+        #robo.motor_left,
+        #robo.motor_right,
         robo.lift,
         robo.gabel,
+        robo.fahren,
     ]:
         if motor is not None:
             motor.stop()

@@ -1,6 +1,6 @@
 import time
 
-from robo_init import robo, setup, ready_wait_for_start, stop_all
+from robo_init import robo, setup, create_motor_pair, ready_wait_for_start, stop_all
 
 
 loop_count = 0
@@ -10,16 +10,22 @@ def run_test_loop():
     global loop_count
 
     if loop_count == 0:
-        print("motorLeft fwd")
-        robo.motor_left.start()
+#         print("motorLeft fwd")
+#         robo.motor_left.start()
+# 
+#     if loop_count == 20:
+#         robo.motor_left.stop()
+#         print("motorRight fwd")
+#         robo.motor_right.start()
+# 
+#     if loop_count == 40:
+#         robo.motor_right.stop()
+ 
+
+        robo.fahren.start()
 
     if loop_count == 20:
-        robo.motor_left.stop()
-        print("motorRight fwd")
-        robo.motor_right.start()
-
-    if loop_count == 40:
-        robo.motor_right.stop()
+        robo.fahren.stop()
         print("Lift down")
         robo.lift.set_default_speed(20)
         robo.lift.start()
@@ -52,6 +58,16 @@ def run_test_loop():
 
         object_entfernung2 = robo.obj_color_sensor.get_distance()
         print(f"Objekt Entfernung 2: {object_entfernung2}")
+        
+        # direkt hier im code
+        # anstelle von setup() of robo_init.py line 82
+        robo.fahren2 = robo.fahren = create_motor_pair(
+            left_port="A",
+            right_port="B",
+            hat_name="Hat1",
+        )
+        robo.fahren.start()
+        
     if loop_count == 120:
         print("Rote Taste Drücken!")
         
