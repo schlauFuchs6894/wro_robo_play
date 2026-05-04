@@ -49,29 +49,30 @@ def run():
     
     # 90° nach links
  
-    robo.fahren.run_for_rotations(NUNZIG_GRAD, 40, 40)
-    
-    robo.fahren.run_for_rotations(gerade2,20,-20)
-    
-    robo.fahren.run_for_rotations(0.67, -40, -40)
-    
-    robo.fahren.run_for_rotations(ROTATIONS_PER_CM * 13,20,-20)
-    aufluepfen()
-    robo.fahren.run_for_rotations(NUNZIG_GRAD, -40, -40)
-    robo.fahren.run_for_rotations(2, 30, -30)
-    robo.fahren.run_for_rotations(NUNZIG_GRAD, -40, -40)
-
-    while not robo.color_sensor.get_color == "black":
-        robo.fahren.start(20, -20)
-        time.sleep(0.1)
-    else:
-        robo.fahren.stop()
-    robo.fahren.run_for_rotations(NUNZIG_GRAD, 40, 40)
-    
+#     robo.fahren.run_for_rotations(NUNZIG_GRAD, 40, 40)
+#     
+#     robo.fahren.run_for_rotations(gerade2,20,-20)
+#     
+#     robo.fahren.run_for_rotations(0.67, -40, -40)
+#     
+#     robo.fahren.run_for_rotations(ROTATIONS_PER_CM * 13,20,-20)
+#     aufluepfen()
+#     robo.fahren.run_for_rotations(NUNZIG_GRAD, -40, -40)
+#     robo.fahren.run_for_rotations(2, 30, -30)
+#     robo.fahren.run_for_rotations(NUNZIG_GRAD, -40, -40)
+# 
+#     while not robo.color_sensor.get_color == "black":
+#         robo.fahren.start(20, -20)
+#         time.sleep(0.1)
+#     else:
+#         robo.fahren.stop()
+#     robo.fahren.run_for_rotations(NUNZIG_GRAD, 40, 40)
+#     
 
 
 def main():
     setup()
+#    robo.fahren.plimit()
     ready_wait_for_start()
     run()      
 

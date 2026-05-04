@@ -1,4 +1,6 @@
 from buildhat.devices import Device
+from gpiozero import LED
+
 import time
 
 from buildhat import (
@@ -29,6 +31,7 @@ CLASS_MAP = {
 
 GPIO_BUTTON_ROT = 20
 GPIO_BUTTON_BLAU = 21
+GPIO_LED_GRUEN = 26
 
 H1_RST_GPIO = 4
 H1_BOOT_GPIO = 22
@@ -45,7 +48,8 @@ class RoboState:
 
         self.button_blau = None
         self.button_rot = None
-
+        self.led = None
+        
         self.motor_left = None
         self.motor_right = None
         self.lift = None
@@ -55,17 +59,19 @@ class RoboState:
         self.distance = None
         self.obj_color_sensor = None
         self.color_sensor = None
-
+        
 
 robo = RoboState()
 
 
-def setup():
-    deregister_all()
-
+def setup():   
     robo.button_rot = Button(GPIO_BUTTON_ROT)
     robo.button_blau = Button(GPIO_BUTTON_BLAU)
+    robo.led = LED(26) 
+    robo.led.off()
 
+    deregister_all()
+    
     robo.hats, robo.hats_info = init_hats()
 
     # 1. Manuell reservieren (MotorPair)
@@ -99,7 +105,7 @@ def setup():
     #robo.fahren = init_motor_pair(hat_name="Hat1")
 
     stop_all()
-
+    
     set_default()
 
     print("Init done")
@@ -291,10 +297,12 @@ def stop_all():
 
 def ready_wait_for_start():
     print("Wait on Button blau!")
-
+    robo.led.on()
     while not robo.button_blau.is_pressed:
         time.sleep(0.1)
-
+    while robo.button_blau.is_pressed:
+        time.sleep(0.1)
+    robo.led.off()
 
 def deregister_all():
     for bhat in list(Device._registry.values()):

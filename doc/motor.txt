@@ -1,0 +1,58 @@
+['BOOT0_GPIO_NUMBER', 'DISCONNECTED_DEVICE', 'RESET_GPIO_NUMBER', 'SERIAL_DEV', 
+ 'UNKNOWN_DEVICE', '_DEFAULT_SERIAL',
+ '__annotations__', '__class__', '__del__', '__delattr__', '__dict__', '__dir__', '__doc__', 
+ '__eq__', '__firstlineno__', '__format__', '__ge__', '__getattribute__', '__getstate__', 
+ '__gt__', '__hash__',
+ '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__',
+ '__reduce__', '__reduce_ex__', '__repr__', 
+ '__setattr__', '__sizeof__', '__static_attributes__', '__str__', '__subclasshook__', 
+ '__weakref__',
+ 
+ '_bqueue', '_combi', '_combimode', '_conn', '_create_buildhat', '_currentspeed',
+ '_cvqueue', '_default_instance', '_default_key',
+ '_device_names', '_hat', '_hat_instance', '_intermediate', '_interval', '_key_for',
+ '_modestr', '_noapos', '_oldpos', '_queue', '_registry', '_release', '_resolve_device',
+ '_rpm', '_run_for_degrees', '_run_for_seconds', 
+ '_run_positional_ramp', '_run_to_position', '_runmode',
+ '_setup', '_simplemode', '_speed_process', '_typeid', '_used', '_used_key', 
+ '_wait_for_nonblocking', '_when_rotated', '_write', '_write1',
+ 
+ 'bias', 'callback', 'coast', 'connected', 
+ 'default_speed', 'desc_for_id', 'description',
+ 'deselect', 'float', 'get', 'get_aposition', 'get_default_instance',
+ 'get_position', 'get_speed',
+ 'interval', 'isconnected', 'mode', 'name', 'name_for_id', 'off', 'on',
+ 'plimit', 'port', 'pwm', 'pwmparams',
+ 'release', 'reverse',
+ 'run_for_degrees', 'run_for_rotations', 'run_for_seconds',
+ 'run_to_position', 'select', 'set_default_instance',
+ 'set_default_speed', 'set_speed_unit_rpm',
+ 'start', 'stop', 'typeid', 'typeidcur',
+ 'when_rotated']
+ 
+ 
+ Calib
+ 
+ Init done
+Wait on Button blau!
+Lift: -89, -847 Gabel:130, 130
+to top postin!
+Wait on Button blau!
+Lift Top:(soll100 ist64), -1054
+LIFT CALIBRIEREN!
+to lowest postion!
+Wait on Button blau!
+Lift Top:(soll100 ist-47), -1165
+Lift unten:(soll60 ist40), -359
+Wait on Button blau!
+Lift unten:(soll60 ist148), -250
+GABEL CALIBRIEREN!
+to full open postin!
+Gabel:(soll128 ist131), -173
+to closed postin!
+Wait on Button blau!
+Gabel:(soll-15 ist-21), 35
+GABEL OBJEKTE CALIBRIEREN!
+Turm halte postion!
+Wait on Button blau!
+ 
